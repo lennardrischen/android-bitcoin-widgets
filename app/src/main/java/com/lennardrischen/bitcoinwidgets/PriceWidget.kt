@@ -12,9 +12,9 @@ import android.widget.RemoteViews
  */
 class PriceWidget : AppWidgetProvider() {
     companion object {
-        const val WIDGET_WORK_NAME = "BitcoinPriceUpdateWork"
-        const val TAG = "ChartWidget"
-        const val ACTION_REFRESH_WIDGET = "com.lennardrischen.bitcoinapp.ACTION_REFRESH_WIDGET"
+        const val WIDGET_WORK_NAME = "RefreshPriceWidgetWork"
+        const val TAG = "PriceWidget"
+        const val ACTION_REFRESH_WIDGET = "com.lennardrischen.bitcoinwidgets.ACTION_REFRESH_WIDGET"
     }
 
     override fun onUpdate(
