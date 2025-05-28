@@ -1,27 +1,101 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.BitcoinWidgets.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.BitcoinWidgets.AppWidgetContainer">
 
     <TextView
-        android:id="@+id/appwidget_price_text"
+        android:id="@+id/appwidget_1_btc_equals"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="?attr/colorPrimary"
-        android:text="96.192 €" />
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="18sp"
+        android:text="1 ₿ =" />
 
     <TextView
-        android:id="@+id/appwidget_text"
-        style="@style/Widget.BitcoinWidgets.AppWidget.InnerView"
+        android:id="@+id/appwidget_price_text"
+        android:layout_below="@id/appwidget_1_btc_equals"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
+        android:paddingBottom="4dp"
+        android:textSize="26sp"
+        android:textColor="?attr/colorPrimary"
+        android:text="96.192 €"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="?attr/colorOnSurface"
+            android:text="Aktualisiert: 13:28" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="12sp"
+            android:text="Btn" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/appwidget_chart_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rounded_background"
+        android:layout_below="@id/appwidget_price_text"
+        android:padding="4dp">
+
+        <ImageView
+            android:id="@+id/appwidget_chart_image_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="0dp"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/text_top"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="Test Chart"
+            android:scaleType="fitXY"
+            android:src="@drawable/test_btc_chart" />
+
+        <TextView
+            android:id="@+id/text_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingEnd="6dp"
+            android:paddingStart="6dp"
+            android:text="98.824 €"
+            android:textColor="?attr/colorSecondary"
+            android:textSize="13sp"
+            android:layout_alignTop="@id/appwidget_chart_image_view"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/text_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingEnd="6dp"
+            android:paddingStart="6dp"
+            android:text="94.210 €"
+            android:textColor="?attr/colorSecondary"
+            android:textSize="13sp"
+            android:layout_alignBottom="@id/appwidget_chart_image_view"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
 </RelativeLayout>
