@@ -34,15 +34,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
+            android:paddingEnd="10dp"
             android:textColor="?attr/colorOnSurface"
             android:text="Aktualisiert: 13:28" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="12sp"
-            android:text="Btn" />
+        <ImageButton
+            android:background="@drawable/round_button_background"
+            android:id="@+id/button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/refresh_cw_alt_3_svgrepo_com"
+            android:textColor="?attr/colorOnPrimary"
+            android:padding="8dp" />
 
     </LinearLayout>
 
@@ -97,5 +101,8 @@
             android:layout_alignBottom="@id/appwidget_chart_image_view"
             android:layout_alignParentEnd="true" />
 
+
+
     </RelativeLayout>
+
 </RelativeLayout>
