@@ -14,16 +14,37 @@
         android:textSize="18sp"
         android:text="1 ₿ =" />
 
-    <TextView
-        android:id="@+id/appwidget_price_text"
-        android:layout_below="@id/appwidget_1_btc_equals"
+    <LinearLayout
+        android:id="@+id/appwidget_price_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="4dp"
-        android:textSize="26sp"
-        android:textColor="?attr/colorPrimary"
-        android:text="96.192 €"
-        android:textStyle="bold" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_below="@id/appwidget_1_btc_equals" >
+
+        <TextView
+            android:id="@+id/appwidget_price_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp"
+            android:paddingEnd="14dp"
+            android:textSize="26sp"
+            android:textColor="?attr/colorPrimary"
+            android:text="96.192 €"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_rectangle_textview_background"
+            android:textColor="?attr/colorOnPrimary"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:textSize="12dp"
+            android:text="+ 4.2%" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -60,8 +81,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/rounded_background"
-        android:layout_below="@id/appwidget_price_text"
+        android:layout_below="@id/appwidget_price_layout"
         android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/appwidget_chart_background_image_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/text_top"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="Test Chart"
+            android:scaleType="fitXY"
+            android:src="@drawable/test_btc_chart_background"
+            android:tint="?attr/colorSecondary"
+            tools:ignore="UseAppTint" />
 
         <ImageView
             android:id="@+id/appwidget_chart_image_view"
