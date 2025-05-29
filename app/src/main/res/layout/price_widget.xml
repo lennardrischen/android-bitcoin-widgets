@@ -49,7 +49,8 @@
             android:layout_height="30dp"
             android:scaleType="centerInside"
             android:src="@drawable/refresh_cw_alt_3_svgrepo_com"
-            android:textColor="?attr/colorOnPrimary"
+            android:tint="?attr/colorOnPrimary"
+            tools:ignore="UseAppTint"
             android:padding="8dp" />
 
     </LinearLayout>
