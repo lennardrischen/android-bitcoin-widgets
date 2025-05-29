@@ -58,31 +58,24 @@
         android:layout_height="match_parent"
         android:background="@drawable/rounded_background"
         android:layout_below="@id/appwidget_price_text"
-        android:padding="4dp">
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/appwidget_chart_image_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:paddingStart="6dp"
-            android:paddingEnd="0dp"
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@+id/text_top"
             android:layout_marginEnd="8dp"
             android:contentDescription="Test Chart"
             android:scaleType="fitXY"
-            android:src="@drawable/test_btc_chart" />
+            android:src="@drawable/test_btc_chart"
+            app:tint="?attr/colorPrimary" />
 
         <TextView
             android:id="@+id/text_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:paddingEnd="6dp"
-            android:paddingStart="6dp"
             android:text="98.824 €"
             android:textColor="?attr/colorSecondary"
             android:textSize="13sp"
@@ -93,10 +86,6 @@
             android:id="@+id/text_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:paddingEnd="6dp"
-            android:paddingStart="6dp"
             android:text="94.210 €"
             android:textColor="?attr/colorSecondary"
             android:textSize="13sp"

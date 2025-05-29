@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.work.Constraints
@@ -88,6 +89,19 @@ class PriceWidget : AppWidgetProvider() {
 
         WorkManager.getInstance(context).enqueue(immediateWorkRequest)
         Log.d(TAG, "One time RefreshPriceWidgetWorker scheduled.")
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context?,
+        appWidgetManager: AppWidgetManager?,
+        appWidgetId: Int,
+        newOptions: Bundle?
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+
+        Log.d(TAG, "onAppWidgetOptionsChanged invoked.")
+
+        // TODO Redraw bitmap for new resolution
     }
 }
 

@@ -14,7 +14,12 @@ import org.json.JSONObject
 import java.io.IOException
 import java.util.Locale
 import android.content.ComponentName
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
 import android.widget.RemoteViews
+import androidx.core.graphics.createBitmap
 
 data class BitcoinPriceData(
     val price: Double,
@@ -41,7 +46,7 @@ class RefreshPriceWidgetWorker(appContext: Context, params: WorkerParameters): C
             val bitcoinMarketChartData = ApiRequester.fetchBitcoinMarketChartData()
             Log.d(TAG, "Fetched following Bitcoin market chart data: $bitcoinMarketChartData")
 
-            WidgetUpdater.updatePriceWidget(applicationContext, bitcoinPriceData)
+            WidgetUpdater.updatePriceWidget(applicationContext, bitcoinPriceData, bitcoinMarketChartData)
 
             Result.success()
         } catch (e: Exception) {
@@ -107,7 +112,9 @@ class ApiRequester() {
 
 class WidgetUpdater() {
     companion object {
-        fun updatePriceWidget(context: Context, bitcoinPriceData: BitcoinPriceData) {
+        private const val TAG = "WidgetUpdater"
+
+        fun updatePriceWidget(context: Context, bitcoinPriceData: BitcoinPriceData, bitcoinMarketChartData: BitcoinMarketChartData) {
             val price = bitcoinPriceData.price
             val formattedPrice = formatPrice(price)
 
@@ -121,9 +128,26 @@ class WidgetUpdater() {
 
                 views.setTextViewText(R.id.appwidget_price_text, formattedPrice)
 
+                val (width, height) = getAppWidgetMaxWidthAndHeight(context, appWidgetManager, appWidgetId)
+                val bitmap = drawPriceChart(bitcoinMarketChartData, width, height)
+
+                views.setImageViewBitmap(R.id.appwidget_chart_image_view, bitmap)
+
                 // Instruct the widget manager to update the widget
                 appWidgetManager.updateAppWidget(appWidgetId, views)
             }
+        }
+
+        private fun getAppWidgetMaxWidthAndHeight(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int): Pair<Int, Int> {
+            val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+            val maxWidthDp = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)
+            val maxHeightDp = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
+
+            val density = context.resources.displayMetrics.density
+            val widthPx = (maxWidthDp * density).toInt()
+            val heightPx = (maxHeightDp * density).toInt()
+
+            return Pair(widthPx, heightPx)
         }
 
         private fun formatPrice(price: Double): String {
@@ -131,6 +155,47 @@ class WidgetUpdater() {
             formatter.maximumFractionDigits = 0
             formatter.minimumFractionDigits = 0
             return formatter.format(price)
+        }
+
+        private fun drawPriceChart(bitcoinMarketChartData: BitcoinMarketChartData, width: Int, height: Int): Bitmap {
+            val prices: List<Float> = bitcoinMarketChartData.prices.map { it.second.toFloat() }
+
+            Log.d(TAG, "Prices: ${prices}")
+
+            val bitmap = createBitmap(width, height)
+            val canvas = Canvas(bitmap)
+            canvas.drawColor(Color.TRANSPARENT)
+            //canvas.drawColor(Color.LTGRAY)
+
+            val paint = Paint().apply {
+                color = Color.parseColor("#FFFFFFFF")
+                strokeWidth = minOf(width, height) * 0.02f // determine based on the smaller dimension
+                style = Paint.Style.STROKE
+                isAntiAlias = true
+            }
+
+            val minValue = prices.minOrNull() ?: 0f
+            val maxValue = prices.maxOrNull() ?: 1f
+
+            val xRatio: Float = width.toFloat() / (prices.size - 1)
+            val yRatio: Float = height / (maxValue - minValue)
+
+            val path = Path()
+
+            for (i in prices.indices) {
+                val x = (i * xRatio)
+                // y-axes top is 0
+                val y = (height - (prices[i] - minValue) * yRatio)
+
+                if (i == 0) {
+                    path.moveTo(x, y)
+                } else {
+                    path.lineTo(x, y)
+                }
+            }
+            canvas.drawPath(path, paint)
+
+            return bitmap
         }
     }
 }
