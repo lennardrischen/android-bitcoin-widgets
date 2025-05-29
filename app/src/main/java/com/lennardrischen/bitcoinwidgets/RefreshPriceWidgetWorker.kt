@@ -1,5 +1,6 @@
 package com.lennardrischen.bitcoinwidgets
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.graphics.Bitmap
@@ -14,10 +15,12 @@ import org.json.JSONObject
 import java.io.IOException
 import java.util.Locale
 import android.content.ComponentName
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.icu.util.Calendar
 import android.widget.RemoteViews
 import androidx.core.graphics.createBitmap
 
@@ -117,6 +120,7 @@ class WidgetUpdater() {
         fun updatePriceWidget(context: Context, bitcoinPriceData: BitcoinPriceData, bitcoinMarketChartData: BitcoinMarketChartData) {
             val price = bitcoinPriceData.price
             val formattedPrice = formatPrice(price)
+            val formattedTime = getCurrentTime()
 
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val thisWidget = ComponentName(context, PriceWidget::class.java)
@@ -127,11 +131,25 @@ class WidgetUpdater() {
                 val views = RemoteViews(context.packageName, R.layout.price_widget)
 
                 views.setTextViewText(R.id.appwidget_price_text, formattedPrice)
+                views.setTextViewText(R.id.appwidget_updated_text, formattedTime)
 
                 val (width, height) = getAppWidgetMaxWidthAndHeight(context, appWidgetManager, appWidgetId)
                 val bitmap = drawPriceChart(bitcoinMarketChartData, width, height)
 
                 views.setImageViewBitmap(R.id.appwidget_chart_image_view, bitmap)
+
+                val refreshIntent = Intent(context, PriceWidget::class.java).apply {
+                    action = PriceWidget.ACTION_REFRESH_WIDGET
+                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                }
+                val refreshPendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    appWidgetId,
+                    refreshIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
+                views.setOnClickPendingIntent(R.id.appwidget_refresh_button, refreshPendingIntent)
 
                 // Instruct the widget manager to update the widget
                 appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -157,10 +175,17 @@ class WidgetUpdater() {
             return formatter.format(price)
         }
 
+        private fun getCurrentTime(): String {
+            val calendar = Calendar.getInstance()
+            val hour = calendar.get(Calendar.HOUR_OF_DAY)
+            val minute = calendar.get(Calendar.MINUTE)
+            return String.format(Locale.GERMANY, "Aktualisiert: %02d:%02d", hour, minute)
+        }
+
         private fun drawPriceChart(bitcoinMarketChartData: BitcoinMarketChartData, width: Int, height: Int): Bitmap {
             val prices: List<Float> = bitcoinMarketChartData.prices.map { it.second.toFloat() }
 
-            Log.d(TAG, "Prices: ${prices}")
+            Log.d(TAG, "Prices: $prices")
 
             val bitmap = createBitmap(width, height)
             val canvas = Canvas(bitmap)

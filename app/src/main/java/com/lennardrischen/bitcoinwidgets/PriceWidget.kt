@@ -43,6 +43,27 @@ class PriceWidget : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.d(TAG, "onReceive invoked.")
         super.onReceive(context, intent)
+
+        if (context != null && intent != null) {
+            if (intent.action == ACTION_REFRESH_WIDGET) {
+                val appWidgetId = intent.getIntExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID
+                )
+
+                if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+                    Log.d(TAG, "Refresh button clicked for widget ID: $appWidgetId - Triggering Worker.")
+
+                    // TODO Why passing to worker? maybe just fetch them from appwidgetmanager within worker
+                    val appWidgetManager = AppWidgetManager.getInstance(context)
+                    val appWidgetIds = appWidgetManager.getAppWidgetIds(
+                        android.content.ComponentName(context, PriceWidget::class.java)
+                    )
+
+                    enqueueOneTimeApiRequestWorker(context, appWidgetIds)
+                }
+            }
+        }
     }
 
     override fun onEnabled(context: Context) {
